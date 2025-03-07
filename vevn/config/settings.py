@@ -11,16 +11,20 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+
 import os
 
 from pathlib import Path
+from os.path import join, dirname
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# load_dotenv(os.path.join(BASE_DIR, ".env"))
+
+dotenv_path = join(dirname(__file__),'.env')
+load_dotenv(dotenv_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -91,14 +95,25 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     }
 # }
 
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'postgres'),
-        'USER': os.getenv('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
-        'HOST': os.getenv('POSTGRES_HOST', 'db'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        'NAME' : os.environ.get('POSTGRES_DB'),
+        'USER' : os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
+        
+        # replication user 만드는 도중 발생한 문제 (설정해줘야함)
+        
+        # 1. root계정에서 create schema myschema AUTHORIZATION replication;
+        # 2. OPTIONS 설정 
+        'OPTIONS': {
+                'options': '-c search_path=myschema'
+            },
+
     }
 }
 

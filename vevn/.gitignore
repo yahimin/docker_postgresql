@@ -1,5 +1,7 @@
 .env.dev
+.env.dev2
 postgres_data
 Scripts
 Lib
 include
+.env
